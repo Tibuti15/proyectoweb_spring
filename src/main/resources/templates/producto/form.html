@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h2>Producto EPP</h2>
+
+<form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+
+ID: <input th:field="*{codigoPeep}"><br>
+Nombre: <input th:field="*{nombrePepp}"><br>
+Marca: <input th:field="*{marcaPepp}"><br>
+Unidad: <input th:field="*{unidadPepp}"><br>
+Tipo protección: <input th:field="*{tipoProteccionPepp}"><br>
+
+<button type="submit">Guardar</button>
+
+</form>
+
+</body>
+</html>

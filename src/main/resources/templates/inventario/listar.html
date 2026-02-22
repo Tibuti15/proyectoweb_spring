@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h2>Inventario EPP</h2>
+<a th:href="@{/inventarios/nuevo}">Nuevo</a>
+<a th:href="@{/productos}">Ir a Productos</a>
+<table border="1">
+<tr>
+    <th>ID</th>
+    <th>Producto</th>
+    <th>Talla</th>
+    <th>Stock</th>
+    <th>Valor</th>
+    <th>Acciones</th>
+</tr>
+
+<tr th:each="i : ${lista}">
+    <td th:text="${i.codigoInvepp}"></td>
+    <td th:text="${i.producto.nombrePepp}"></td>
+    <td th:text="${i.tallaInvepp}"></td>
+    <td th:text="${i.stockInvepp}"></td>
+    <td th:text="${i.valorUnitarioInvepp}"></td>
+    <td>
+        <a th:href="@{/inventarios/editar/{id}(id=${i.codigoInvepp})}">Editar</a>
+        <a th:href="@{/inventarios/eliminar/{id}(id=${i.codigoInvepp})}">Eliminar</a>
+    </td>
+</tr>
+</table>
+
+</body>
+</html>
