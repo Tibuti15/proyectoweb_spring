@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container mt-4">
+    <h1 class="mb-4">Inventario EPP</h1>
+
+    <a th:href="@{/inventario/nuevo}" class="btn btn-primary mb-3">Nuevo Inventario</a>
+	<a th:href="@{/productos}" class="btn btn-info">Ir a Productos</a>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Código PEEP</th>
+                <th>Talla</th>
+                <th>Stock</th>
+                <th>Valor Unitario</th>
+                <th>IVA</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="inv : ${lista}">
+                <td th:text="${inv.codigoPeep}"></td>
+                <td th:text="${inv.talla}"></td>
+                <td th:text="${inv.stock}"></td>
+                <td th:text="${inv.valorUnitario}"></td>
+                <td th:text="${inv.iva}"></td>
+                <td>
+                    <a th:href="@{'/inventarios/editar/' + ${inv.id}}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{'/inventarios/eliminar/' + ${inv.id}}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -17,30 +17,35 @@ public class InventarioEppController {
         this.service = service;
     }
 
+    // LISTAR
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("lista", service.listar());
-        return "inventario/listar";
+        return "views/listarInventario";  // ✅ templates/views/listarInventario.html
     }
 
+    // NUEVO
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("inventario", new InventarioEpp());
-        return "inventario/form";
+        return "views/formInventario";  // ✅ templates/views/formInventario.html
     }
 
+    // GUARDAR
     @PostMapping("/guardar")
     public String guardar(InventarioEpp inventario) {
         service.guardar(inventario);
         return "redirect:/inventario";
     }
 
+    // EDITAR
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("inventario", service.buscar(id));
-        return "inventario/form";
+        return "views/formInventario";
     }
 
+    // ELIMINAR
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id) {
         service.eliminar(id);

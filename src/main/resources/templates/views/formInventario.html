@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Inventario</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container mt-4">
+    <h1 th:text="${inventario.id} != null ? 'Editar Inventario' : 'Nuevo Inventario'"></h1>
+
+    <form th:action="@{/inventarios/guardar}" th:object="${inventario}" method="post">
+        <div class="mb-3">
+            <label for="codigoPeep" class="form-label">Código PEEP</label>
+            <input type="text" th:field="*{codigoPeep}" class="form-control" id="codigoPeep" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="talla" class="form-label">Talla</label>
+            <input type="text" th:field="*{talla}" class="form-control" id="talla" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" th:field="*{stock}" class="form-control" id="stock" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="valorUnitario" class="form-label">Valor Unitario</label>
+            <input type="number" step="0.01" th:field="*{valorUnitario}" class="form-control" id="valorUnitario" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="iva" class="form-label">IVA</label>
+            <input type="number" step="0.01" th:field="*{iva}" class="form-control" id="iva" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a th:href="@{/inventario}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

@@ -21,14 +21,14 @@ public class ProductoEppController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("lista", service.listar());
-        return "producto/listar";
+        return "views/listar";   // ✅ templates/views/listar.html
     }
 
     // FORM NUEVO
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("producto", new ProductoEpp());
-        return "producto/form";
+        return "views/form";   // ✅ templates/views/form.html
     }
 
     // GUARDAR
@@ -42,7 +42,7 @@ public class ProductoEppController {
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("producto", service.buscar(id));
-        return "producto/form";
+        return "views/form";
     }
 
     // ELIMINAR
