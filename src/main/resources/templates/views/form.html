@@ -4,40 +4,408 @@
 
 <div th:fragment="contenido">
 
-    <h2 th:text="${producto.codigoPeep != null} ? 
-                'Editar Producto' : 'Nuevo Producto'"></h2>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <form th:action="@{/productos/guardar}" 
-          th:object="${producto}" 
-          method="post">
+<style>
+    /* Estilos igual que antes */
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
 
-        <input type="hidden" th:field="*{codigoPeep}" />
+    .form-header {
+        background: linear-gradient(135deg, #1e2b3c, #0f1a26);
+        color: white;
+        padding: 30px 40px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 4px solid #ff6b4a;
+    }
 
+    .form-header i {
+        font-size: 32px;
+        color: #ff6b4a;
+    }
+
+    .form-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .form-header p {
+        font-size: 13px;
+        color: #b0b0b0;
+        margin-top: 4px;
+    }
+
+    .form-body {
+        padding: 40px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e2b3c;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group label span.required {
+        color: #ff6b4a;
+        margin-left: 3px;
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: #999;
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px 14px 12px 42px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 15px;
+        color: #1e2b3c;
+        transition: all 0.3s;
+        outline: none;
+        background: #fafafa;
+    }
+
+    .form-group input:focus {
+        border-color: #ff6b4a;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(255,107,74,0.1);
+    }
+
+    .form-group input:focus + i,
+    .input-wrapper:focus-within i {
+        color: #ff6b4a;
+    }
+
+    .form-group input.input-error {
+        border-color: #e74c3c;
+        background: #fff5f5;
+    }
+
+    .error-msg {
+        display: none;
+        color: #e74c3c;
+        font-size: 12px;
+        margin-top: 6px;
+        padding-left: 4px;
+    }
+
+    .error-msg.visible {
+        display: block;
+    }
+
+    .form-divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 30px 0;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+    }
+
+    .btn-guardar {
+        background: linear-gradient(135deg, #ff6b4a, #ff3b2f);
+        color: white;
+        border: none;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-guardar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255,107,74,0.4);
+    }
+
+    .btn-cancelar {
+        background: white;
+        color: #1e2b3c;
+        border: 2px solid #1e2b3c;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-cancelar:hover {
+        background: #1e2b3c;
+        color: white;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <i class="fas fa-box-open"></i>
         <div>
-            <label>Nombre</label>
-            <input type="text" th:field="*{nombrePepp}" required />
+            <h2 th:text="${producto.codigoPeep != null} ? 'Editar Producto EPP' : 'Nuevo Producto EPP'"></h2>
+            <p th:text="${producto.codigoPeep != null} ? 'Modifica los datos del producto' : 'Completa los campos para registrar un nuevo producto'"></p>
         </div>
+    </div>
 
-        <div>
-            <label>Marca</label>
-            <input type="text" th:field="*{marcaPepp}" required />
-        </div>
+    <div class="form-body">
+        <form id="formProducto"
+              th:action="@{/productos/guardar}"
+              th:object="${producto}"
+              method="post"
+              novalidate>
 
-        <div>
-            <label>Unidad</label>
-            <input type="text" th:field="*{unidadPepp}" required />
-        </div>
+            <input type="hidden" th:field="*{codigoPeep}" />
 
-        <div>
-            <label>Tipo de Protección</label>
-            <input type="text" th:field="*{tipoProteccionPepp}" required />
-        </div>
+            <div class="form-group">
+                <label>Nombre del Producto <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-tag"></i>
+                    <input type="text" th:field="*{nombrePepp}"
+                           id="nombrePepp"
+                           placeholder="Ej: Casco de seguridad"
+                           maxlength="100" />
+                </div>
+                <span class="error-msg" id="err-nombre">El nombre debe contener solo letras, espacios y guiones (mínimo 3 caracteres).</span>
+            </div>
 
-        <button type="submit">Guardar</button>
-        <a th:href="@{/productos}">Cancelar</a>
+            <div class="form-group">
+                <label>Marca <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-industry"></i>
+                    <input type="text" th:field="*{marcaPepp}"
+                           id="marcaPepp"
+                           placeholder="Ej: 3M, Honeywell"
+                           maxlength="60" />
+                </div>
+                <span class="error-msg" id="err-marca">La marca debe contener solo letras, números, espacios y guiones (mínimo 2 caracteres).</span>
+            </div>
 
-    </form>
+            <div class="form-group">
+                <label>Unidad <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-ruler"></i>
+                    <input type="text" th:field="*{unidadPepp}"
+                           id="unidadPepp"
+                           placeholder="Ej: Par, Unidad, Caja"
+                           maxlength="30" />
+                </div>
+                <span class="error-msg" id="err-unidad">La unidad debe contener solo letras (mínimo 1 carácter).</span>
+            </div>
 
+            <div class="form-group">
+                <label>Tipo de Protección <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-shield-alt"></i>
+                    <input type="text" th:field="*{tipoProteccionPepp}"
+                           id="tipoProteccionPepp"
+                           placeholder="Ej: 624, 622, 625"
+                           maxlength="60" />
+                </div>
+                <span class="error-msg"  id="err-tipo">El tipo de protección es obligatorio (puede contener números).</span>
+            </div>
+
+            <div class="form-divider"></div>
+
+            <div class="form-actions">
+                <a th:href="@{/productos}" class="btn-cancelar">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+                <button type="button" class="btn-guardar" onclick="validarFormulario()">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+
+        </form>
+    </div>
 </div>
 
+<script>
+function validarFormulario() {
+    let valido = true;
+
+    // Validación para Nombre (solo letras, espacios y guiones)
+    const nombreInput = document.getElementById('nombrePepp');
+    const nombreErr = document.getElementById('err-nombre');
+    const nombreVal = nombreInput.value.trim();
+    const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s\-]+$/;
+    
+    if (nombreVal.length < 3) {
+        nombreInput.classList.add('input-error');
+        nombreErr.classList.add('visible');
+        nombreErr.textContent = 'El nombre debe tener al menos 3 caracteres.';
+        valido = false;
+    } else if (!nombreRegex.test(nombreVal)) {
+        nombreInput.classList.add('input-error');
+        nombreErr.classList.add('visible');
+        nombreErr.textContent = 'El nombre solo puede contener letras, espacios y guiones.';
+        valido = false;
+    } else {
+        nombreInput.classList.remove('input-error');
+        nombreErr.classList.remove('visible');
+    }
+
+    // Validación para Marca (letras, números, espacios y guiones)
+    const marcaInput = document.getElementById('marcaPepp');
+    const marcaErr = document.getElementById('err-marca');
+    const marcaVal = marcaInput.value.trim();
+    const marcaRegex = /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]+$/;
+    
+    if (marcaVal.length < 2) {
+        marcaInput.classList.add('input-error');
+        marcaErr.classList.add('visible');
+        marcaErr.textContent = 'La marca debe tener al menos 2 caracteres.';
+        valido = false;
+    } else if (!marcaRegex.test(marcaVal)) {
+        marcaInput.classList.add('input-error');
+        marcaErr.classList.add('visible');
+        marcaErr.textContent = 'La marca solo puede contener letras, números, espacios y guiones.';
+        valido = false;
+    } else {
+        marcaInput.classList.remove('input-error');
+        marcaErr.classList.remove('visible');
+    }
+
+    // Validación para Unidad (solo letras)
+    const unidadInput = document.getElementById('unidadPepp');
+    const unidadErr = document.getElementById('err-unidad');
+    const unidadVal = unidadInput.value.trim();
+    const unidadRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    
+    if (unidadVal.length < 1) {
+        unidadInput.classList.add('input-error');
+        unidadErr.classList.add('visible');
+        unidadErr.textContent = 'La unidad es obligatoria.';
+        valido = false;
+    } else if (!unidadRegex.test(unidadVal)) {
+        unidadInput.classList.add('input-error');
+        unidadErr.classList.add('visible');
+        unidadErr.textContent = 'La unidad solo puede contener letras y espacios.';
+        valido = false;
+    } else {
+        unidadInput.classList.remove('input-error');
+        unidadErr.classList.remove('visible');
+    }
+
+    // Validación para Tipo de Protección (acepta letras y números)
+    const tipoInput = document.getElementById('tipoProteccionPepp');
+    const tipoErr = document.getElementById('err-tipo');
+    const tipoVal = tipoInput.value.trim();
+    
+    if (tipoVal.length < 1) {
+        tipoInput.classList.add('input-error');
+        tipoErr.classList.add('visible');
+        tipoErr.textContent = 'El tipo de protección es obligatorio.';
+        valido = false;
+    } else {
+        tipoInput.classList.remove('input-error');
+        tipoErr.classList.remove('visible');
+    }
+
+    if (!valido) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Campos inválidos',
+            text: 'Por favor corrige los errores en el formulario.',
+            confirmButtonColor: '#ff6b4a'
+        });
+        return;
+    }
+
+    Swal.fire({
+        icon: 'question',
+        title: '¿Confirmar guardado?',
+        text: '¿Deseas guardar este producto?',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b4a',
+        cancelButtonColor: '#1e2b3c',
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Revisar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formProducto').submit();
+        }
+    });
+}
+
+// Limpiar error al escribir
+['nombrePepp','marcaPepp','unidadPepp','tipoProteccionPepp'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+        this.classList.remove('input-error');
+        const errMap = {
+            'nombrePepp': 'err-nombre',
+            'marcaPepp': 'err-marca',
+            'unidadPepp': 'err-unidad',
+            'tipoProteccionPepp': 'err-tipo'
+        };
+        document.getElementById(errMap[id]).classList.remove('visible');
+    });
+});
+
+// Validación en tiempo real mientras escribe
+document.getElementById('nombrePepp').addEventListener('input', function() {
+    const valor = this.value;
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s\-]*$/;
+    if (!regex.test(valor)) {
+        this.value = valor.slice(0, -1);
+    }
+});
+
+document.getElementById('marcaPepp').addEventListener('input', function() {
+    const valor = this.value;
+    const regex = /^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s\-]*$/;
+    if (!regex.test(valor)) {
+        this.value = valor.slice(0, -1);
+    }
+});
+
+document.getElementById('unidadPepp').addEventListener('input', function() {
+    const valor = this.value;
+    const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$/;
+    if (!regex.test(valor)) {
+        this.value = valor.slice(0, -1);
+    }
+});
+</script>
+
+</div>
 </html>

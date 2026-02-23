@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="views/plantilla">
+
+<div th:fragment="contenido">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #1e2b3c, #0f1a26);
+        color: white;
+        padding: 30px 40px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 4px solid #ff6b4a;
+    }
+
+    .form-header i {
+        font-size: 32px;
+        color: #ff6b4a;
+    }
+
+    .form-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .form-header p {
+        font-size: 13px;
+        color: #b0b0b0;
+        margin-top: 4px;
+    }
+
+    .form-body {
+        padding: 40px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e2b3c;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group label span.required {
+        color: #ff6b4a;
+        margin-left: 3px;
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: #999;
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 12px 14px 12px 42px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 15px;
+        color: #1e2b3c;
+        transition: all 0.3s;
+        outline: none;
+        background: #fafafa;
+    }
+
+    .form-group select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        border-color: #ff6b4a;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(255,107,74,0.1);
+    }
+
+    .form-group input:focus + i,
+    .input-wrapper:focus-within i {
+        color: #ff6b4a;
+    }
+
+    .form-group input.input-error, .form-group select.input-error {
+        border-color: #e74c3c;
+        background: #fff5f5;
+    }
+
+    .error-msg {
+        display: none;
+        color: #e74c3c;
+        font-size: 12px;
+        margin-top: 6px;
+        padding-left: 4px;
+    }
+
+    .error-msg.visible {
+        display: block;
+    }
+
+    .form-divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 30px 0;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+    }
+
+    .btn-guardar {
+        background: linear-gradient(135deg, #ff6b4a, #ff3b2f);
+        color: white;
+        border: none;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-guardar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255,107,74,0.4);
+    }
+
+    .btn-cancelar {
+        background: white;
+        color: #1e2b3c;
+        border: 2px solid #1e2b3c;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-cancelar:hover {
+        background: #1e2b3c;
+        color: white;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="form-container">
+    <div class="form-header">
+        <i class="fas fa-truck"></i>
+        <div>
+            <h2 th:text="${proveedor.codigoProvEpp != null} ? 'Editar Proveedor EPP' : 'Nuevo Proveedor EPP'"></h2>
+            <p th:text="${proveedor.codigoProvEpp != null} ? 'Modifica los datos del proveedor' : 'Completa los campos para registrar un nuevo proveedor'"></p>
+        </div>
+    </div>
+
+    <div class="form-body">
+        <form id="formProveedor"
+              th:action="@{/proveedores/guardar}"
+              th:object="${proveedor}"
+              method="post"
+              novalidate>
+
+            <input type="hidden" th:field="*{codigoProvEpp}" />
+
+            <div class="form-group">
+                <label>Nombre del Proveedor <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-building"></i>
+                    <input type="text" th:field="*{nombreProvEpp}"
+                           id="nombreProvEpp"
+                           placeholder="Ej: Suministros Industriales SA"
+                           maxlength="100" />
+                </div>
+                <span class="error-msg" id="err-nombre">El nombre es obligatorio (mínimo 3 caracteres).</span>
+            </div>
+
+            <div class="form-group">
+                <label>Persona de Contacto <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user-tie"></i>
+                    <input type="text" th:field="*{contactoProvEpp}"
+                           id="contactoProvEpp"
+                           placeholder="Ej: Juan Pérez"
+                           maxlength="100" />
+                </div>
+                <span class="error-msg" id="err-contacto">El nombre de contacto es obligatorio.</span>
+            </div>
+
+            <div class="form-group">
+                <label>Teléfono <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" th:field="*{telefonoProvEpp}"
+                           id="telefonoProvEpp"
+                           placeholder="Ej: +57 300 123 4567"
+                           maxlength="20" />
+                </div>
+                <span class="error-msg" id="err-telefono">El teléfono es obligatorio.</span>
+            </div>
+
+            <div class="form-group">
+                <label>Email <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" th:field="*{emailProvEpp}"
+                           id="emailProvEpp"
+                           placeholder="Ej: contacto@empresa.com"
+                           maxlength="100" />
+                </div>
+                <span class="error-msg" id="err-email">El email es obligatorio y debe ser válido.</span>
+            </div>
+
+            <div class="form-group">
+                <label>Producto que vende <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <i class="fas fa-box"></i>
+                    <select th:field="*{producto.codigoPeep}" id="productoSelect">
+                        <option value="">-- Seleccione un producto --</option>
+                        <option th:each="prod : ${productos}" 
+                                th:value="${prod.codigoPeep}" 
+                                th:text="${prod.nombrePepp} + ' - ' + ${prod.marcaPepp}"></option>
+                    </select>
+                </div>
+                <span class="error-msg" id="err-producto">Debe seleccionar un producto.</span>
+            </div>
+
+            <div class="form-divider"></div>
+
+            <div class="form-actions">
+                <a th:href="@{/proveedores}" class="btn-cancelar">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+                <button type="button" class="btn-guardar" onclick="validarFormulario()">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+function validarFormulario() {
+    let valido = true;
+
+    const campos = [
+        { id: 'nombreProvEpp',     errId: 'err-nombre',   min: 3 },
+        { id: 'contactoProvEpp',   errId: 'err-contacto', min: 3 },
+        { id: 'telefonoProvEpp',   errId: 'err-telefono', min: 7 },
+        { id: 'emailProvEpp',      errId: 'err-email',    min: 5 },
+        { id: 'productoSelect',    errId: 'err-producto', min: 1 }
+    ];
+
+    campos.forEach(function(campo) {
+        const input = document.getElementById(campo.id);
+        const err   = document.getElementById(campo.errId);
+        let val;
+
+        if (campo.id === 'productoSelect') {
+            val = input.value;
+        } else {
+            val = input.value.trim();
+        }
+
+        // Validación específica para email
+        if (campo.id === 'emailProvEpp' && val.length >= campo.min) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(val)) {
+                input.classList.add('input-error');
+                err.classList.add('visible');
+                err.textContent = 'El email no tiene un formato válido';
+                valido = false;
+                return;
+            }
+        }
+
+        if (val.length < campo.min) {
+            input.classList.add('input-error');
+            err.classList.add('visible');
+            // Restaurar mensaje original si era email
+            if (campo.id === 'emailProvEpp') {
+                err.textContent = 'El email es obligatorio y debe ser válido.';
+            }
+            valido = false;
+        } else {
+            input.classList.remove('input-error');
+            err.classList.remove('visible');
+        }
+    });
+
+    if (!valido) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Campos incompletos',
+            text: 'Por favor completa todos los campos correctamente.',
+            confirmButtonColor: '#ff6b4a'
+        });
+        return;
+    }
+
+    Swal.fire({
+        icon: 'question',
+        title: '¿Confirmar guardado?',
+        text: '¿Deseas guardar este proveedor?',
+        showCancelButton: true,
+        confirmButtonColor: '#ff6b4a',
+        cancelButtonColor: '#1e2b3c',
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Revisar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formProveedor').submit();
+        }
+    });
+}
+
+// Limpiar error al escribir
+['nombreProvEpp','contactoProvEpp','telefonoProvEpp','emailProvEpp','productoSelect'].forEach(function(id) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('input', function() {
+            this.classList.remove('input-error');
+            const errMap = {
+                'nombreProvEpp': 'err-nombre',
+                'contactoProvEpp': 'err-contacto',
+                'telefonoProvEpp': 'err-telefono',
+                'emailProvEpp': 'err-email',
+                'productoSelect': 'err-producto'
+            };
+            document.getElementById(errMap[id]).classList.remove('visible');
+        });
+        
+        // Para el select también en cambio
+        if (id === 'productoSelect') {
+            elemento.addEventListener('change', function() {
+                this.classList.remove('input-error');
+                document.getElementById('err-producto').classList.remove('visible');
+            });
+        }
+    }
+});
+</script>
+
+</div>
+</html>
