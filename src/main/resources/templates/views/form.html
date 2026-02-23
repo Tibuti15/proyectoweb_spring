@@ -1,37 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulario Producto</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="views/plantilla">
 
-<h2 th:text="${producto.codigoPeep != null} ? 'Editar Producto' : 'Nuevo Producto'"></h2>
+<div th:fragment="contenido">
 
-<form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+    <h2 th:text="${producto.codigoPeep != null} ? 
+                'Editar Producto' : 'Nuevo Producto'"></h2>
 
-    <input type="hidden" th:field="*{codigoPeep}" />
+    <form th:action="@{/productos/guardar}" 
+          th:object="${producto}" 
+          method="post">
 
-    <div>
-        <label>Nombre</label>
-        <input type="text" th:field="*{nombrePepp}" required />
-    </div>
-    <div>
-        <label>Marca</label>
-        <input type="text" th:field="*{marcaPepp}" required />
-    </div>
-    <div>
-        <label>Unidad</label>
-        <input type="text" th:field="*{unidadPepp}" required />
-    </div>
-    <div>
-        <label>Tipo de Protección</label>
-        <input type="text" th:field="*{tipoProteccionPepp}" required />
-    </div>
+        <input type="hidden" th:field="*{codigoPeep}" />
 
-    <button type="submit">Guardar</button>
-    <a th:href="@{/productos}">Cancelar</a>
-</form>
+        <div>
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombrePepp}" required />
+        </div>
 
-</body>
+        <div>
+            <label>Marca</label>
+            <input type="text" th:field="*{marcaPepp}" required />
+        </div>
+
+        <div>
+            <label>Unidad</label>
+            <input type="text" th:field="*{unidadPepp}" required />
+        </div>
+
+        <div>
+            <label>Tipo de Protección</label>
+            <input type="text" th:field="*{tipoProteccionPepp}" required />
+        </div>
+
+        <button type="submit">Guardar</button>
+        <a th:href="@{/productos}">Cancelar</a>
+
+    </form>
+
+</div>
+
 </html>
