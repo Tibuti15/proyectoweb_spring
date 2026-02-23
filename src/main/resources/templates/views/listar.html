@@ -4,17 +4,17 @@
 
 <h2>Productos EPP</h2>
 <a th:href="@{/productos/nuevo}">Nuevo</a>
-<a th:href="@{/inventario}">Ir a Inventario</a>
+
+
 <table border="1">
 <tr>
-    <th>ID</th>
+    <th>Codigo</th>
     <th>Nombre</th>
     <th>Marca</th>
     <th>Unidad</th>
     <th>Tipo</th>
     <th>Acciones</th>
 </tr>
-
 <tr th:each="p : ${lista}">
     <td th:text="${p.codigoPeep}"></td>
     <td th:text="${p.nombrePepp}"></td>
