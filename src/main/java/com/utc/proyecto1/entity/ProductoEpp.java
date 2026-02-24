@@ -1,6 +1,6 @@
 package com.utc.proyecto1.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "producto_epp")

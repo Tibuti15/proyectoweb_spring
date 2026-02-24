@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Proyecto1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        /* Tu mismo estilo que ya tienes */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-bottom: none;
+        }
+        
+        .card-header h3 {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .card-body {
+            padding: 40px;
+            background: white;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+        
+        .form-control.is-valid {
+            border-color: #198754;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success:active {
+            transform: translateY(0);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 15px;
+            margin-bottom: 25px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        .text-center p {
+            margin-top: 25px;
+            color: #6c757d;
+        }
+        
+        .text-center a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .text-center a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .input-icon-wrapper {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b0b0b0;
+            z-index: 10;
+        }
+        
+        .mb-4 {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .mb-4:nth-child(1) { animation-delay: 0.1s; }
+        .mb-4:nth-child(2) { animation-delay: 0.2s; }
+        .mb-4:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 30px 20px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+        
+        .btn-success i {
+            margin-right: 8px;
+        }
+        
+        .password-strength {
+            height: 5px;
+            border-radius: 5px;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+        
+        .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 0.875em;
+            color: #dc3545;
+        }
+        
+        .form-control.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-6 col-lg-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="bi bi-person-plus-fill me-2"></i>
+                            Registro de Usuario
+                        </h3>
+                        <p class="mb-0 mt-2 small opacity-75">
+                            Crea tu cuenta para acceder al sistema
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Mostrar mensajes de error -->
+                        <div th:if="${error}" class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <span th:text="${error}"></span>
+                        </div>
+                        
+                        <!-- Mostrar mensajes de éxito -->
+                        <div th:if="${success}" class="alert alert-success">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <span th:text="${success}"></span>
+                        </div>
+                        
+                        <form action="/procesar-registro" method="post" th:object="${usuario}" id="registroForm">
+                            <div class="mb-4">
+                                <label for="nombre" class="form-label">
+                                    <i class="bi bi-person-fill me-1"></i>
+                                    Nombre Completo
+                                </label>
+                                <div class="input-icon-wrapper">
+                                    <input type="text" class="form-control" id="nombre" 
+                                           th:field="*{nombre}" 
+                                           placeholder="Ej. Juan Pérez" 
+                                           required>
+                                    <i class="bi bi-person-circle input-icon"></i>
+                                </div>
+                                <div class="form-text">
+                                    Ingresa tu nombre completo
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="form-label">
+                                    <i class="bi bi-envelope-fill me-1"></i>
+                                    Email
+                                </label>
+                                <div class="input-icon-wrapper">
+                                    <input type="email" class="form-control" id="email" 
+                                           th:field="*{email}" 
+                                           placeholder="ejemplo@correo.com" 
+                                           required>
+                                    <i class="bi bi-envelope input-icon"></i>
+                                </div>
+                                <div class="form-text" id="emailHelp">
+                                    Usaremos este email para tu cuenta
+                                </div>
+                                <div class="invalid-feedback" id="emailError">
+                                    El correo debe ser válido: @gmail.com, @hotmail.com, @outlook.com, @yahoo.com, @utc.edu.ec
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-lock-fill me-1"></i>
+                                    Contraseña
+                                </label>
+                                <div class="input-icon-wrapper">
+                                    <input type="password" class="form-control" id="password" 
+                                           th:field="*{password}" 
+                                           placeholder="Mínimo 8 caracteres" 
+                                           required>
+                                    <i class="bi bi-lock input-icon"></i>
+                                </div>
+                                <div class="form-text">
+                                    Usa al menos 8 caracteres con números y letras
+                                </div>
+                                <div class="password-strength bg-secondary" style="width: 0%;"></div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-success" id="btnRegistro">
+                                    <i class="bi bi-person-plus-fill"></i>
+                                    Crear Cuenta
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p class="mb-0">
+                                ¿Ya tienes cuenta? 
+                                <a href="/login" class="text-decoration-none">
+                                    Inicia sesión aquí 
+                                    <i class="bi bi-arrow-right-short"></i>
+                                </a>
+                            </p>
+                        </div>
+                        
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                Al registrarte aceptas nuestros 
+                                <a href="#" class="text-decoration-none">Términos y Condiciones</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Validación de email en tiempo real
+        document.getElementById('email')?.addEventListener('input', function(e) {
+            const email = e.target.value;
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            
+            // Dominios permitidos
+            const dominiosPermitidos = [
+                'gmail.com',
+                'hotmail.com', 
+                'outlook.com',
+                'yahoo.com',
+                'utc.edu.ec'
+            ];
+            
+            // Expresión regular para validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                emailInput.classList.add('is-invalid');
+                emailInput.classList.remove('is-valid');
+                emailError.textContent = 'Formato de correo inválido';
+                return;
+            }
+            
+            // Obtener el dominio del email
+            const dominio = email.split('@')[1];
+            
+            // Verificar si el dominio está permitido
+            if (dominiosPermitidos.includes(dominio)) {
+                emailInput.classList.remove('is-invalid');
+                emailInput.classList.add('is-valid');
+            } else {
+                emailInput.classList.add('is-invalid');
+                emailInput.classList.remove('is-valid');
+                emailError.textContent = 'Dominio no permitido. Usa: @gmail.com, @hotmail.com, @outlook.com, @yahoo.com, @utc.edu.ec';
+            }
+        });
+
+        // Validación antes de enviar el formulario
+        document.getElementById('registroForm')?.addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const emailInput = document.getElementById('email');
+            
+            const dominiosPermitidos = [
+                'gmail.com',
+                'hotmail.com', 
+                'outlook.com',
+                'yahoo.com',
+                'utc.edu.ec'
+            ];
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                emailInput.classList.add('is-invalid');
+                document.getElementById('emailError').textContent = 'Formato de correo inválido';
+                return;
+            }
+            
+            const dominio = email.split('@')[1];
+            
+            if (!dominiosPermitidos.includes(dominio)) {
+                e.preventDefault();
+                emailInput.classList.add('is-invalid');
+                document.getElementById('emailError').textContent = 'Dominio no permitido';
+                return;
+            }
+        });
+
+        // Indicador de fortaleza de contraseña
+        document.getElementById('password')?.addEventListener('input', function(e) {
+            const strength = e.target.value.length;
+            const indicator = document.querySelector('.password-strength');
+            if (indicator) {
+                if (strength === 0) {
+                    indicator.style.width = '0%';
+                    indicator.className = 'password-strength bg-secondary';
+                } else if (strength < 5) {
+                    indicator.style.width = '33%';
+                    indicator.className = 'password-strength bg-danger';
+                } else if (strength < 8) {
+                    indicator.style.width = '66%';
+                    indicator.className = 'password-strength bg-warning';
+                } else {
+                    indicator.style.width = '100%';
+                    indicator.className = 'password-strength bg-success';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
