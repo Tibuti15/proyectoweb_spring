@@ -121,9 +121,9 @@
             <td th:text="${p.unidadPepp}"></td>
             <td th:text="${p.tipoProteccionPepp}"></td>
             <td>
-                <a th:href="@{/productos/editar/{id}(id=${p.codigoPeep})}" class="btn-editar">✏️ Editar</a>
+                <a th:href="@{/productos/editar/{id}(id=${p.codigoPeep})}" class="btn-editar"> <i class="fa-solid fa-pen"></i> Editar</a>
                 &nbsp;
-                <button class="btn-eliminar" th:attr="data-id=${p.codigoPeep}">🗑️ Eliminar</button>
+                <button class="btn-eliminar" th:attr="data-id=${p.codigoPeep}" > <i class="fa-solid fa-trash"></i> Eliminar</button>
             </td>
         </tr>
     </tbody>

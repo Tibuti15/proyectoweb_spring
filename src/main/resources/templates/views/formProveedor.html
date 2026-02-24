@@ -210,9 +210,10 @@
                     <input type="text" th:field="*{nombreProvEpp}"
                            id="nombreProvEpp"
                            placeholder="Ej: Suministros Industriales SA"
-                           maxlength="100" />
+                           maxlength="100" 
+                           onkeypress="return soloLetras(event)" />
                 </div>
-                <span class="error-msg" id="err-nombre">El nombre es obligatorio (mínimo 3 caracteres).</span>
+                <span class="error-msg" id="err-nombre">El nombre es obligatorio y solo puede contener letras (mínimo 3 caracteres).</span>
             </div>
 
             <div class="form-group">
@@ -222,9 +223,10 @@
                     <input type="text" th:field="*{contactoProvEpp}"
                            id="contactoProvEpp"
                            placeholder="Ej: Juan Pérez"
-                           maxlength="100" />
+                           maxlength="100"
+                           onkeypress="return soloLetras(event)" />
                 </div>
-                <span class="error-msg" id="err-contacto">El nombre de contacto es obligatorio.</span>
+                <span class="error-msg" id="err-contacto">El nombre de contacto es obligatorio y solo puede contener letras (mínimo 3 caracteres).</span>
             </div>
 
             <div class="form-group">
@@ -233,10 +235,11 @@
                     <i class="fas fa-phone"></i>
                     <input type="text" th:field="*{telefonoProvEpp}"
                            id="telefonoProvEpp"
-                           placeholder="Ej: +57 300 123 4567"
-                           maxlength="20" />
+                           placeholder="Ej: 3001234567"
+                           maxlength="12"
+                           onkeypress="return soloNumeros(event)" />
                 </div>
-                <span class="error-msg" id="err-telefono">El teléfono es obligatorio.</span>
+                <span class="error-msg" id="err-telefono">El teléfono es obligatorio y debe contener máximo 12 números.</span>
             </div>
 
             <div class="form-group">
@@ -281,6 +284,46 @@
 </div>
 
 <script>
+// Función para permitir solo letras (incluyendo espacios y tildes)
+function soloLetras(e) {
+    var key = e.keyCode || e.which;
+    var tecla = String.fromCharCode(key).toLowerCase();
+    var letras = " áéíóúüñabcdefghijklmnñopqrstuvwxyz";
+    var especiales = [8, 37, 39, 46, 32]; // backspace, flechas izquierda/derecha, delete, espacio
+    
+    var tecla_especial = false;
+    for(var i in especiales) {
+        if(key == especiales[i]) {
+            tecla_especial = true;
+            break;
+        }
+    }
+    
+    if(letras.indexOf(tecla) == -1 && !tecla_especial) {
+        return false;
+    }
+}
+
+// Función para permitir solo números
+function soloNumeros(e) {
+    var key = e.keyCode || e.which;
+    var tecla = String.fromCharCode(key);
+    var numeros = "0123456789";
+    var especiales = [8, 37, 39, 46]; // backspace, flechas izquierda/derecha, delete
+    
+    var tecla_especial = false;
+    for(var i in especiales) {
+        if(key == especiales[i]) {
+            tecla_especial = true;
+            break;
+        }
+    }
+    
+    if(numeros.indexOf(tecla) == -1 && !tecla_especial) {
+        return false;
+    }
+}
+
 function validarFormulario() {
     let valido = true;
 
@@ -314,12 +357,66 @@ function validarFormulario() {
                 return;
             }
         }
+        
+        // Validación para nombre (solo letras)
+        if (campo.id === 'nombreProvEpp' && val.length >= campo.min) {
+            const letrasRegex = /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/;
+            if (!letrasRegex.test(val)) {
+                input.classList.add('input-error');
+                err.classList.add('visible');
+                err.textContent = 'El nombre solo puede contener letras';
+                valido = false;
+                return;
+            }
+        }
+        
+        // Validación para contacto (solo letras)
+        if (campo.id === 'contactoProvEpp' && val.length >= campo.min) {
+            const letrasRegex = /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/;
+            if (!letrasRegex.test(val)) {
+                input.classList.add('input-error');
+                err.classList.add('visible');
+                err.textContent = 'El contacto solo puede contener letras';
+                valido = false;
+                return;
+            }
+        }
+        
+        // Validación para teléfono (solo números y máximo 12)
+        if (campo.id === 'telefonoProvEpp') {
+            const numerosRegex = /^[0-9]+$/;
+            if (val.length < campo.min) {
+                input.classList.add('input-error');
+                err.classList.add('visible');
+                err.textContent = 'El teléfono es obligatorio (mínimo 7 números)';
+                valido = false;
+                return;
+            } else if (val.length > 12) {
+                input.classList.add('input-error');
+                err.classList.add('visible');
+                err.textContent = 'El teléfono no puede tener más de 12 números';
+                valido = false;
+                return;
+            } else if (!numerosRegex.test(val)) {
+                input.classList.add('input-error');
+                err.classList.add('visible');
+                err.textContent = 'El teléfono solo puede contener números';
+                valido = false;
+                return;
+            }
+        }
 
         if (val.length < campo.min) {
             input.classList.add('input-error');
             err.classList.add('visible');
-            // Restaurar mensaje original si era email
-            if (campo.id === 'emailProvEpp') {
+            // Restaurar mensaje original
+            if (campo.id === 'nombreProvEpp') {
+                err.textContent = 'El nombre es obligatorio y solo puede contener letras (mínimo 3 caracteres).';
+            } else if (campo.id === 'contactoProvEpp') {
+                err.textContent = 'El nombre de contacto es obligatorio y solo puede contener letras (mínimo 3 caracteres).';
+            } else if (campo.id === 'telefonoProvEpp') {
+                err.textContent = 'El teléfono es obligatorio y debe contener máximo 12 números.';
+            } else if (campo.id === 'emailProvEpp') {
                 err.textContent = 'El email es obligatorio y debe ser válido.';
             }
             valido = false;
@@ -332,7 +429,7 @@ function validarFormulario() {
     if (!valido) {
         Swal.fire({
             icon: 'error',
-            title: 'Campos incompletos',
+            title: 'Campos incompletos o inválidos',
             text: 'Por favor completa todos los campos correctamente.',
             confirmButtonColor: '#ff6b4a'
         });

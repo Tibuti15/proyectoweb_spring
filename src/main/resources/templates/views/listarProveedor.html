@@ -121,9 +121,9 @@
             <td th:text="${p.emailProvEpp}"></td>
             <td th:text="${p.producto != null ? p.producto.nombrePepp : 'No asignado'}"></td>
             <td>
-                <a th:href="@{/proveedores/editar/{id}(id=${p.codigoProvEpp})}" class="btn-editar">✏️ Editar</a>
+                <a th:href="@{/proveedores/editar/{id}(id=${p.codigoProvEpp})}" class="btn-editar"> <i class="fa-solid fa-pen"></i> Editar</a>
                 &nbsp;
-                <button class="btn-eliminar" th:attr="data-id=${p.codigoProvEpp}">🗑️ Eliminar</button>
+                <button class="btn-eliminar" th:attr="data-id=${p.codigoProvEpp}"> <i class="fa-solid fa-trash"></i> Eliminar</button>
             </td>
         </tr>
     </tbody>

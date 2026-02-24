@@ -45,8 +45,13 @@
         </dependency>
 
         <!-- SECURITY -->
+        
 
         <!-- MAIL (OBLIGATORIO para que exista JavaMailSender) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
 
         <!-- MYSQL CORRECTO -->
         <dependency>
